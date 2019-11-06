@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Creators as AuthActions } from '../../store/ducks/auth';
 
 const Authentication = ({ navigation, theme }) => {
-  const [token, setToken] = useState('000000');
+  const [token, setToken] = useState('');
 
   const authenticated = useSelector(store => store.auth.authenticated);
   const loading = useSelector(store => store.auth.loading);

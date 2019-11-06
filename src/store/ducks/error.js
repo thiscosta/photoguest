@@ -4,8 +4,8 @@ export const Types = {
 };
 
 const INITIAL_STATE = {
-    error: true,
-    errorMessage: "Erro ao enviar foto para o servidor. O limite de fotos já foi atingido"
+    error: false,
+    errorMessage: ""
 }
 
 export default function error(state = INITIAL_STATE, action) {

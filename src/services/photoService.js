@@ -12,7 +12,6 @@ async function getPhotos() {
     const response = await api.get(`list_fotos.php?${urlParams}`)
     await Axios.post('https://photoguestest.free.beeceptor.com', { data: response.data.array_fotos })
     if (response.data.sucess == 200) {
-        console.log('arrayFotos: ' + response.data.array_fotos)
         let photos = response.data.array_fotos.split('|')
         photos = photos.filter(photo => photo.length > 2)
         return { success: true, data: photos }
@@ -65,7 +64,6 @@ async function uploadPhotos() {
         no_telao=${row.doc.showOnScreen ? 1 : 0}&
         num_ft_permitidas=${authData.num_ft_permitidas}`
         if (row.doc.base64) {
-            console.log('Foto local encontrada, será realizada a tentativa de sincronização')
             const response = await api.post(`envio_de_fotos.php?${urlParams}`,
                 { nome_da_foto: `${row.doc.base64}` }
             )

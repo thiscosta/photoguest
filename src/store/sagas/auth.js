@@ -4,6 +4,7 @@ import { call, put } from 'redux-saga/effects'
 import { tryAuth } from '../../services/auth'
 
 import { Creators as AuthActions } from '../ducks/auth'
+import { Creators as ErrorActions } from '../ducks/error'
 
 export function* authenticate(action) {
     try {
@@ -15,6 +16,7 @@ export function* authenticate(action) {
             yield put(AuthActions.authenticateFailed())
 
     } catch (err) {
-        yield put(ErrorActions.setError("Não foi possível fazer login. " + err.toString()))
+        yield put(AuthActions.authenticateFailed())
+        yield put(ErrorActions.addError("Não foi possível fazer login. " + err.toString()))
     }
 }
