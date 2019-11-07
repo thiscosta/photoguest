@@ -1,11 +1,11 @@
 import styled from 'styled-components/native';
 
-import { Title, Button, Checkbox, Text } from 'react-native-paper';
+import {Title, Button, Checkbox, Text} from 'react-native-paper';
 
 export const Container = styled.ScrollView.attrs({
   contentContainerStyle: {
-    flex: 1
-  }
+    flex: 1,
+  },
 })`
   background-color: ${props => props.background};
 `;
@@ -24,7 +24,7 @@ export const PhotoContainer = styled.TouchableOpacity`
   margin-top: 20;
   min-height: 150;
   margin-horizontal: 70;
-  margin-bottom:20;
+  margin-bottom: 20;
   align-items: center;
   justify-content: center;
   background-color: ${props => props.background};
@@ -47,9 +47,7 @@ export const CheckboxContainer = styled.View`
   flex: 1;
 `;
 
-export const CustomCheckbox = styled(Checkbox.Android).attrs({
-
-})``;
+export const CustomCheckbox = styled(Checkbox.Android).attrs({})``;
 
 export const CheckboxTitle = styled(Text)`
   color: ${props => props.color};

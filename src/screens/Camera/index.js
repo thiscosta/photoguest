@@ -1,54 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
-import { StatusBar, Image, SafeAreaView } from 'react-native';
-import Logo from '../../assets/images/white-logo.png'
+import {StatusBar, Image, SafeAreaView} from 'react-native';
 
-import NetInfo from '@react-native-community/netinfo'
+import Logo from '../../assets/images/white-logo.png';
+import Header from '../../components/Header';
 
-import { withTheme, Button, ActivityIndicator } from 'react-native-paper';
+import NetInfo from '@react-native-community/netinfo' ;
+
+import {withTheme, Button, ActivityIndicator} from 'react-native-paper';
 import {
-  Container, PhotoContainer, CameraTitle, SaveButton,
-  CustomCheckbox, CheckboxContainer, CheckboxTitle,
-  ButtonText
+  Container,
+  PhotoContainer,
+  CameraTitle,
+  SaveButton,
+  CustomCheckbox,
+  CheckboxContainer,
+  CheckboxTitle,
+  ButtonText,
 } from './styles';
 
 import appTheme from '../../design/apptheme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImagePicker from 'react-native-image-crop-picker';
-import { ActionSheetCustom } from 'react-native-actionsheet';
+import {ActionSheetCustom} from 'react-native-actionsheet';
 
-import { useDispatch, useSelector } from 'react-redux'
-import { Creators as PhotoActions } from '../../store/ducks/photo'
+import {useDispatch, useSelector} from 'react-redux';
+import {Creators as PhotoActions} from '../../store/ducks/photo' ;
 
 import PouchDB from 'pouchdb-react-native';
 
-const Camera = ({ theme }) => {
-
+const Camera = ({theme}) => {
   let actionSheet;
   const db = new PouchDB('photoguest_database');
 
   const [photo, setPhoto] = useState('');
-  const [checked, setChecked] = useState(false)
-  const [edit, setEdit] = useState(false)
+  const [checked, setChecked] = useState(false);
+  const [edit, setEdit] = useState(false) ;
   const [loadingPhoto, setLoadingPhoto] = useState(false);
-  const savingPhoto = useSelector(store => store.photo.saving)
-  const successSaved = useSelector(store => store.photo.successSaved)
-  const dispatch = useDispatch()
+  const savingPhoto = useSelector(store => store.photo.saving) ;
+  const successSaved = useSelector(store => store.photo.successSaved);
+  const dispatch = useDispatch() ;
 
   useEffect(() => {
     function handlePhotoSave() {
       if (!savingPhoto && !successSaved) {
-        savePhotoLocally()
+        savePhotoLocally() ;
       }
       if (!savingPhoto && successSaved) {
-        dispatch(PhotoActions.getPhotos())
-        setPhoto('')
-        setChecked(false)
+        dispatch(PhotoActions.getPhotos());
+        setPhoto('') ;
+        setChecked(false) ;
       }
     }
-    return handlePhotoSave()
-  }, [savingPhoto])
+    return handlePhotoSave();
+  }, [dispatch, savePhotoLocally, savingPhoto, successSaved]) ;
 
   async function selectImage() {
     actionSheet.show();
@@ -62,9 +68,10 @@ const Camera = ({ theme }) => {
           compressImageQuality: 0.3,
           cropping: edit,
           includeBase64: true,
-        }).then(handleImageReady)
+        })
+          .then(handleImageReady)
           .catch(() => {
-            setLoadingPhoto(false)
+            setLoadingPhoto(false) ;
           });
         break;
       case 1:
@@ -72,13 +79,14 @@ const Camera = ({ theme }) => {
           compressImageQuality: 0.3,
           cropping: edit,
           includeBase64: true,
-        }).then(handleImageReady)
+        })
+          .then(handleImageReady)
           .catch(() => {
-            setLoadingPhoto(false)
+            setLoadingPhoto(false);
           });
         break;
       case 2:
-        setLoadingPhoto(false)
+        setLoadingPhoto(false) ;
         break;
     }
   }
@@ -110,32 +118,35 @@ const Camera = ({ theme }) => {
             left: 0,
           }}
           resizeMode="stretch"
-          source={{ uri: `data:image/png;base64,${photo}` }}
+          source={{uri: `data:image/png;base64,${photo}`}}
         />
       );
     }
   }
 
   async function savePhoto() {
-    const connectionInfo = await NetInfo.fetch()
+    const connectionInfo = await NetInfo.fetch() ;
     if (connectionInfo.isConnected && connectionInfo.isInternetReachable) {
-      dispatch(PhotoActions.savePhoto(photo, checked))
+      dispatch(PhotoActions.savePhoto(photo, checked));
     } else {
-      savePhotoLocally()
+      savePhotoLocally() ;
     }
   }
 
   async function savePhotoLocally() {
-    await db.post({ base64: photo });
+    await db.post({base64: photo});
     setPhoto('');
-    setChecked(false)
+    setChecked(false) ;
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
+      <Header background={theme.colors.background} logo={Logo} />
       <Container background={theme.colors.background}>
-        <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
-        <Image style={{ alignSelf: 'center', maxWidth: 190, maxHeight: 50,  marginBottom: 20 }} source={Logo} />
+        <StatusBar
+          backgroundColor={theme.colors.background}
+          barStyle="light-content"
+        />
         <CameraTitle>Nova foto</CameraTitle>
         <PhotoContainer background={theme.colors.primary} onPress={selectImage}>
           {renderPhotoContainerContent()}
@@ -145,7 +156,7 @@ const Camera = ({ theme }) => {
             color={theme.colors.primary}
             status={edit ? 'checked' : 'unchecked'}
             onPress={() => {
-              setEdit(!edit)
+              setEdit(!edit);
             }}
           />
           <CheckboxTitle color={theme.colors.text}>Editar foto</CheckboxTitle>
@@ -154,19 +165,22 @@ const Camera = ({ theme }) => {
             status={checked ? 'checked' : 'unchecked'}
             disabled={!photo}
             onPress={() => {
-              setChecked(!checked)
+              setChecked(!checked) ;
             }}
           />
-          <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>Mostrar no telão</CheckboxTitle>
-
+          <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>
+            Mostrar no telão
+          </CheckboxTitle>
         </CheckboxContainer>
         <SaveButton
           mode="contained"
           loading={loadingPhoto}
           disabled={!photo}
-          onPress={() => { savePhoto() }}>
+          onPress={() => {
+            savePhoto();
+          }}>
           Salvar
-      </SaveButton>
+        </SaveButton>
         <ActionSheetCustom
           ref={actionSheetRef => (actionSheet = actionSheetRef)}
           title={'Selecionar imagem'}
@@ -183,7 +197,7 @@ const Camera = ({ theme }) => {
 
 Camera.navigationOptions = () => ({
   title: 'Nova foto',
-  tabBarIcon: ({ tintColor }) => (
+  tabBarIcon: ({tintColor}) => (
     <Icon name="camera" size={22} color={tintColor} />
   ),
   headerStyle: {

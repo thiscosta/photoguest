@@ -1,36 +1,31 @@
 import styled from 'styled-components/native';
 
-import { Title, Text, Appbar } from 'react-native-paper';
+import {Title, Text, Appbar} from 'react-native-paper';
 
-export const Container = styled.ScrollView.attrs({
-
-})`
+export const Container = styled.ScrollView.attrs({})`
   background-color: ${props => props.background};
 `;
 
 export const EventContainer = styled.View`
   flex: 1;
-  align-items:center;
+  align-items: center;
   justify-content: center;
-  margin-horizontal:15;
+  margin-horizontal: 15;
 `;
 
-export const Bar = styled(Appbar)`
-  position: absolute;
-  top:0;
-  left:0;
-  right:0;
+export const HeaderLogo = styled.Image`
+  flex: 1;
+  margin-top: 15;
 `;
 
 export const Header = styled(Appbar.Header)`
-  flex: 1;
-  padding-top: 15;
-  justify-content: center;
+  margin-vertical: 15;
+  padding-horizontal: 60;
 `;
 
 export const EventPhoto = styled.Image`
   flex: 1;
-  margin-top: 130;
+  margin-top: 35;
   min-height: 200;
 `;
 
@@ -51,7 +46,7 @@ export const EventMainDetailsTitle = styled(Title)`
   color: ${props => props.color};
   font-size: 18;
   font-family: Poppins-Bold;
-  align-items:flex-end;
+  align-items: flex-end;
   text-align: center;
 `;
 
@@ -70,6 +65,7 @@ export const EventMainDetailsRowData = styled(Text)`
   color: ${props => props.color};
   font-size: 16;
   font-family: Poppins-Regular;
+  margin-left: 8;
 `;
 
 export const EventCapacityContainer = styled.View`
@@ -81,7 +77,7 @@ export const EventCapacityContainer = styled.View`
 
 export const EventCapacityQuantity = styled(Title)`
   color: ${props => props.color};
-  font-size: 25
+  font-size: 25;
 `;
 
 export const EventCapacityText = styled(Text)`
@@ -125,13 +121,13 @@ export const Photo = styled.Image`
 `;
 
 export const EmptyGalleryContainer = styled.View`
-  flex : 1;
+  flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
 export const EmptyGalleryText = styled(Title)`
-margin-top: 10;
+  margin-top: 10;
   color: ${props => props.color};
   font-family: Poppins-Regular;
 `;

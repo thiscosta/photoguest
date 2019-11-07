@@ -1,4 +1,6 @@
 {
   "name": "Photoguest",
+  "androidName": "Photoguest",
+  "iosName" : "photoguest",
   "displayName": "Photoguest"
 }
