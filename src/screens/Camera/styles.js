@@ -14,7 +14,7 @@ export const CameraTitle = styled(Title)`
     padding-top:20
     font-size: 22;
     text-align:center;
-    font-family: Poppins-Light;
+    font-family: Poppins-Regular;
     margin-left: 15;
 `;
 
@@ -47,7 +47,7 @@ export const CheckboxContainer = styled.View`
   flex: 1;
 `;
 
-export const CustomCheckbox = styled(Checkbox).attrs({
+export const CustomCheckbox = styled(Checkbox.Android).attrs({
 
 })``;
 

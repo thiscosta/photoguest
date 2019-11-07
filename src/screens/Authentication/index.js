@@ -63,8 +63,7 @@ const Authentication = ({ navigation, theme }) => {
         <SendButton
           mode="contained"
           onPress={() => {
-            //tryToAuthenticate();
-            navigation.navigate('Gallery');
+            tryToAuthenticate();
           }}
           loading={loading}
           disabled={loading || !token}>

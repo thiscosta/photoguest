@@ -7,8 +7,18 @@ export const tryAuth = async token => {
   );
 
   if (response.data.sucess == 200) {
+    console.log("authData: ", response)
     await AsyncStorage.setItem('@authData', JSON.stringify(response.data))
-    return { success: true, data: response.data };
+    return {
+      success: true,
+      data: {
+        name: response.data.nome_evento,
+        date: response.data.data_evento,
+        time: response.data.horario_evento,
+        location: response.data.local_evento,
+        capacity: response.data.capacidade_evento,
+      },
+    };
   }
 
   return { success: false, message: 'Invalid photographer code' };

@@ -6,7 +6,7 @@ import PouchDB from 'pouchdb-react-native';
 
 async function getPhotos() {
     const authData = JSON.parse(await AsyncStorage.getItem('@authData'))
-    const urlParams = `chave_de_acesso=${accessKey}&id_login_fotografo=21`//${authData.id_fotografo}
+    const urlParams = `chave_de_acesso=${accessKey}&id_login_fotografo=${authData.id_fotografo}&id_principal=${authData.id_principal}`
     const response = await api.get(`list_fotos.php?${urlParams}`)
     if (response.data.sucess == 200) {
         const arrayPhotos = response.data.array_fotos
@@ -21,6 +21,8 @@ async function getPhotos() {
                     flex: 1
                 }
             ))
+
+            console.log("foto3 : ", photos)
             return { success: true, data: photos }
         }
 

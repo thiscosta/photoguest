@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { StatusBar, Image } from 'react-native';
+import { StatusBar, Image, SafeAreaView } from 'react-native';
 import Logo from '../../assets/images/white-logo.png'
 
 import NetInfo from '@react-native-community/netinfo'
@@ -132,50 +132,52 @@ const Camera = ({ theme }) => {
   }
 
   return (
-    <Container background={theme.colors.background}>
-      <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
-      <Image style={{ alignSelf: 'center', minWidth: 150, minHeight: 40, marginVertical: 20 }} source={Logo} />
-      <CameraTitle>Nova foto</CameraTitle>
-      <PhotoContainer background={theme.colors.primary} onPress={selectImage}>
-        {renderPhotoContainerContent()}
-      </PhotoContainer>
-      <CheckboxContainer>
-        <CustomCheckbox
-          color={theme.colors.primary}
-          status={edit ? 'checked' : 'unchecked'}
-          onPress={() => {
-            setEdit(!edit)
-          }}
-        />
-        <CheckboxTitle color={theme.colors.text}>Editar foto</CheckboxTitle>
-        <CustomCheckbox
-          color={theme.colors.primary}
-          status={checked ? 'checked' : 'unchecked'}
-          disabled={!photo}
-          onPress={() => {
-            setChecked(!checked)
-          }}
-        />
-        <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>Mostrar no telão</CheckboxTitle>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Container background={theme.colors.background}>
+        <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
+        <Image style={{ alignSelf: 'center', maxWidth: 190, maxHeight: 50,  marginBottom: 20 }} source={Logo} />
+        <CameraTitle>Nova foto</CameraTitle>
+        <PhotoContainer background={theme.colors.primary} onPress={selectImage}>
+          {renderPhotoContainerContent()}
+        </PhotoContainer>
+        <CheckboxContainer>
+          <CustomCheckbox
+            color={theme.colors.primary}
+            status={edit ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setEdit(!edit)
+            }}
+          />
+          <CheckboxTitle color={theme.colors.text}>Editar foto</CheckboxTitle>
+          <CustomCheckbox
+            color={theme.colors.primary}
+            status={checked ? 'checked' : 'unchecked'}
+            disabled={!photo}
+            onPress={() => {
+              setChecked(!checked)
+            }}
+          />
+          <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>Mostrar no telão</CheckboxTitle>
 
-      </CheckboxContainer>
-      <SaveButton
-        mode="contained"
-        loading={loadingPhoto}
-        disabled={!photo}
-        onPress={() => { savePhoto() }}>
-        Salvar
+        </CheckboxContainer>
+        <SaveButton
+          mode="contained"
+          loading={loadingPhoto}
+          disabled={!photo}
+          onPress={() => { savePhoto() }}>
+          Salvar
       </SaveButton>
-      <ActionSheetCustom
-        ref={actionSheetRef => (actionSheet = actionSheetRef)}
-        title={'Selecionar imagem'}
-        options={['Galeria', 'Câmera', 'Cancelar']}
-        cancelButtonIndex={2}
-        destructiveButtonIndex={2}
-        tintColor={theme.colors.background}
-        onPress={optionSelected}
-      />
-    </Container>
+        <ActionSheetCustom
+          ref={actionSheetRef => (actionSheet = actionSheetRef)}
+          title={'Selecionar imagem'}
+          options={['Galeria', 'Câmera', 'Cancelar']}
+          cancelButtonIndex={2}
+          destructiveButtonIndex={2}
+          tintColor={theme.colors.background}
+          onPress={optionSelected}
+        />
+      </Container>
+    </SafeAreaView>
   );
 };
 

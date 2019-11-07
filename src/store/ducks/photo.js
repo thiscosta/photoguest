@@ -10,8 +10,10 @@ export const Types = {
 
 const INITIAL_STATE = {
   photos: [],
+  
   localPhotos: [],
   loadingLocalPhotos: false,
+
   loading: false,
   saving: false,
   successSaved: true,

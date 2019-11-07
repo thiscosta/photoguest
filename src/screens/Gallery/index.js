@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { StatusBar, BackHandler, Image } from 'react-native';
+import { StatusBar, BackHandler, Image, SafeAreaView } from 'react-native';
 import Logo from '../../assets/images/logo.png'
 
 import { Creators as PhotosActions } from '../../store/ducks/photo';
@@ -8,13 +8,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Modal from '../../components/Modal'
 
-import { withTheme } from 'react-native-paper';
+import { withTheme, ActivityIndicator } from 'react-native-paper';
+
 import {
-  Container,
-  GalleryTitle,
-  PhotosContainer,
-  PhotoBox,
-  Photo,
+  Bar, Container, PhotosContainer, PhotoBox, Photo,
+  EmptyGalleryContainer, EmptyGalleryText, EventContainer,
+  EventPhoto, EventDetails, EventMainDetails, EventCapacityContainer,
+  EventMainDetailsTitle, EventMainDetailsRow, EventMainDetailsRowTitle,
+  EventMainDetailsRowData, EventCapacityQuantity, EventCapacityText,
+  Header
 } from './styles';
 
 import { FlatList } from 'react-native-gesture-handler';
@@ -49,57 +51,107 @@ const Gallery = ({ theme, navigation }) => {
   }, []);
 
   return (
-    <Container background={theme.colors.primary}>
-      <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
-      <Image style={{ alignSelf: 'center', minWidth: 150, minHeight: 40, marginVertical: 20 }} source={Logo} />
-      <Modal
-        isVisible={logoutVisible}
-        onBackdropPress={() => { }}
-        modalBackground={theme.colors.background}
-        iconName="alert-outline"
-        iconColor={theme.colors.accent}
-        modalTitle="Atenção"
-        modalTitleColor={theme.colors.accent}
-        content={"Tem certeza que deseja fazer logout do aplicativo?"}
-        closeText="Cancelar"
-        closeAction={() => { setLogoutVisible(false) }}
-        confirmText="Sair"
-        confirmAction={() => { navigation.dispatch(StackActions.popToTop()) }}
-      />
-      <GalleryTitle color={theme.colors.header}>Galeria</GalleryTitle>
-      <PhotosContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Header>
+        <Image style={{
+          maxWidth: 200,
+          maxHeight: 50,
+          marginBottom: 20,
+          marginTop: 5,
+          borderWidth: 0
+        }} source={Logo} />
+      </Header>
+      <Container background={theme.colors.primary}>
+        <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
 
-        <FlatList
-          data={photos}
-          keyExtractor={(item, index) => index}
-          extraData={photos}
-          numColumns={3}
-          viewabilityConfig={{
-            viewAreaCoveragePercentThreshold: 10,
-          }}
-          showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.1}
-          renderItem={({ item, index }) => (
-            <PhotoBox onPress={() => {
-              setCurrentPhoto(index)
-              setPhotoViewerVisible(true)
-            }} activeOpacity={0.7}>
-              <Photo source={{ uri: item.source.uri }} width={30} />
-            </PhotoBox>
-          )}
+        {/*<Bar>*/}
+
+        {/*</Bar>*/}
+
+        <Modal
+          isVisible={logoutVisible}
+          onBackdropPress={() => { }}
+          modalBackground={theme.colors.background}
+          iconName="alert-outline"
+          iconColor={theme.colors.accent}
+          modalTitle="Atenção"
+          modalTitleColor={theme.colors.accent}
+          content={"Tem certeza que deseja fazer logout do aplicativo?"}
+          closeText="Cancelar"
+          closeAction={() => { setLogoutVisible(false) }}
+          confirmText="Sair"
+          confirmAction={() => { navigation.dispatch(StackActions.popToTop()) }}
         />
-      </PhotosContainer>
 
-      <ImageView
-        images={photos}
-        imageIndex={currentPhoto}
-        isVisible={photoViewerVisible}
-        onClose={() => {
-          setPhotoViewerVisible(false)
-        }}
-      />
+        <EventContainer>
+          <EventPhoto
+            source={{ uri: `http://photoguest.com.br/uploads/25/thumb_25_1573126230.jpg` }}
+            resizeMode="contain"
+            style={{ flex: 1, width: 800 }}
+          />
+          <EventDetails>
+            <EventMainDetails>
+              <EventMainDetailsTitle color={theme.colors.gray}>Meu evento</EventMainDetailsTitle>
+              <EventMainDetailsRow>
+                <EventMainDetailsRowTitle color={theme.colors.header}>Local: </EventMainDetailsRowTitle>
+                <EventMainDetailsRowData color={theme.colors.gray}>Minha casa</EventMainDetailsRowData>
+              </EventMainDetailsRow>
+            </EventMainDetails>
+            <EventCapacityContainer>
+              <EventCapacityQuantity color={theme.colors.gray}>150</EventCapacityQuantity>
+              <EventCapacityText color={theme.colors.gray}>Photoguesters</EventCapacityText>
+            </EventCapacityContainer>
+          </EventDetails>
+        </EventContainer>
 
-    </Container>
+        <PhotosContainer>
+
+          <FlatList
+            data={photos}
+            keyExtractor={(item, index) => index}
+            extraData={photos}
+            numColumns={3}
+            viewabilityConfig={{
+              viewAreaCoveragePercentThreshold: 10,
+            }}
+            showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={0.1}
+            ListEmptyComponent={
+              <EmptyGalleryContainer>
+                <Icon name="photo" size={40} color={theme.colors.gray} />
+                <EmptyGalleryText color={theme.colors.gray}>
+                  Esperando suas fotos
+                </EmptyGalleryText>
+              </EmptyGalleryContainer>
+            }
+            renderItem={({ item, index }) => (
+              <PhotoBox onPress={() => {
+                setCurrentPhoto(index)
+                setPhotoViewerVisible(true)
+              }} activeOpacity={0.7}>
+                <Photo
+                  color={theme.colors.lightGray}
+                  source={{ uri: item.source.uri }}
+                  width={30}
+                  loadingIndicatorSource={<ActivityIndicator />}
+                  fadeDuration={1000}
+                />
+              </PhotoBox>
+            )}
+          />
+        </PhotosContainer>
+
+        <ImageView
+          images={photos}
+          imageIndex={currentPhoto}
+          isVisible={photoViewerVisible}
+          onClose={() => {
+            setPhotoViewerVisible(false)
+          }}
+        />
+
+      </Container>
+    </SafeAreaView>
   );
 };
 

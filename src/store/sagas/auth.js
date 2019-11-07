@@ -11,7 +11,7 @@ export function* authenticate(action) {
         const response = yield call(tryAuth, action.payload)
 
         if (response.success)
-            yield put(AuthActions.authenticateSuccess())
+            yield put(AuthActions.authenticateSuccess(response.data))
         else
             yield put(AuthActions.authenticateFailed())
 
