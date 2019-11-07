@@ -92,7 +92,7 @@ const Camera = ({ theme }) => {
     if (!photo) {
       return (
         <Button loading={photo} disabled={photo}>
-          <ButtonText color={theme.colors.background}>Selecionar imagem</ButtonText>
+          <ButtonText color={theme.colors.background}>Selecionar</ButtonText>
         </Button>
       );
     }
@@ -148,8 +148,6 @@ const Camera = ({ theme }) => {
           }}
         />
         <CheckboxTitle color={theme.colors.text}>Editar foto</CheckboxTitle>
-      </CheckboxContainer>
-      <CheckboxContainer>
         <CustomCheckbox
           color={theme.colors.primary}
           status={checked ? 'checked' : 'unchecked'}
@@ -159,8 +157,8 @@ const Camera = ({ theme }) => {
           }}
         />
         <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>Mostrar no telão</CheckboxTitle>
-      </CheckboxContainer>
 
+      </CheckboxContainer>
       <SaveButton
         mode="contained"
         loading={loadingPhoto}
@@ -168,7 +166,6 @@ const Camera = ({ theme }) => {
         onPress={() => { savePhoto() }}>
         Salvar
       </SaveButton>
-
       <ActionSheetCustom
         ref={actionSheetRef => (actionSheet = actionSheetRef)}
         title={'Selecionar imagem'}
