@@ -29,7 +29,7 @@ const bottomNavigator = createMaterialBottomTabNavigator(
     initialRouteName: 'Gallery',
     activeColor: theme.colors.primary,
     barStyle: {
-      backgroundColor: theme.colors.header,
+      backgroundColor: theme.colors.background,
     },
   },
 );
@@ -40,22 +40,7 @@ const stackNavigatior = createStackNavigator(
     Home: {
       screen: bottomNavigator,
       navigationOptions: {
-        title: 'Photoguest',
-        headerStyle: {
-          backgroundColor: theme.colors.header,
-        },
-        headerLeft: null,
-        headerTintColor: theme.colors.text,
-        headerTitleStyle: {
-          fontWeight: 'light',
-          fontFamily: 'Poppins-Regular',
-          textAlign: 'center',
-          flexGrow: 1,
-          alignSelf: 'center',
-        },
-        headerTitleContainerStyle: {
-          textAlign: 'center',
-        },
+        header: null,
         headerMode: 'float',
       },
     },
@@ -85,9 +70,9 @@ const AppContainerComponent = ({ theme }) => {
         onBackdropPress={() => { dispatch(ErrorActions.dismissError()) }}
         modalBackground={theme.colors.background}
         iconName="alert-outline"
-        iconColor={theme.colors.error}
+        iconColor={theme.colors.primary}
         modalTitle="Alerta"
-        modalTitleColor={theme.colors.error}
+        modalTitleColor={theme.colors.primary}
         content={errorMessage}
         closeText="Fechar"
         confirmText="Ok"

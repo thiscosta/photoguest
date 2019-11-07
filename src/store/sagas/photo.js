@@ -33,7 +33,11 @@ export function* savePhoto(action) {
         if (result.errorCode == 303) {
             yield put(PhotoActions.savePhotoFailed())
             yield put(ErrorActions.addError("O número limite de fotos foi atingido"))
+            return;
         }
+
+        yield put(PhotoActions.savePhotoFailed())
+        yield put(ErrorActions.addError(result.message))
 
     } catch (err) {
         yield put(PhotoActions.savePhotoFailed())

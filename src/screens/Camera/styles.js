@@ -10,15 +10,18 @@ export const Container = styled.View`
 export const CameraTitle = styled(Title)`
     padding-top:40
     font-size: 22;
+    text-align:center;
     font-family: Poppins-Light;
     margin-left: 15;
 `;
 
 export const PhotoContainer = styled.TouchableOpacity`
-  height: 250;
+  flex: 1;
   align-self: stretch;
   margin-top: 40;
+  min-height: 150;
   margin-horizontal: 70;
+  margin-bottom:20;
   align-items: center;
   justify-content: center;
   background-color: ${props => props.background};
@@ -29,11 +32,11 @@ export const SaveButton = styled(Button).attrs({
 })`
   margin-top: 60;
   margin-horizontal: 70;
+  margin-bottom: 30;
 `;
 
 export const CheckboxContainer = styled.View`
   margin-horizontal: 62;
-  margin-top:30;
   align-items: center;
   flex-direction: row;
 `;
@@ -43,5 +46,11 @@ export const CustomCheckbox = styled(Checkbox).attrs({
 })``;
 
 export const CheckboxTitle = styled(Text)`
-  color: ${props => props.color}
+  color: ${props => props.color};
+`;
+
+export const ButtonText = styled(Text)`
+  color: ${props => props.color};
+  text-transform: uppercase
+  font-size: 18
 `;

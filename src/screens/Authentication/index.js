@@ -6,6 +6,8 @@ import {
   Container,
   LogoContainer,
   Logo,
+  Slogan,
+  EffectPhrase,
   TokenInput,
   SendButton,
   Content,
@@ -14,7 +16,7 @@ import {
 
 import { withTheme } from 'react-native-paper';
 
-import ImageLogo from '../../assets/images/logo.png';
+import ImageLogo from '../../assets/images/white-logo.png';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Creators as AuthActions } from '../../store/ducks/auth';
@@ -47,9 +49,11 @@ const Authentication = ({ navigation, theme }) => {
       <LogoContainer>
         <Logo source={ImageLogo} />
       </LogoContainer>
+      <Slogan>A rede social do seu evento</Slogan>
       <Content>
+        <EffectPhrase>TODAS AS FOTOS DO SEU {"\n"} EVENTO EM UM SÓ LUGAR.</EffectPhrase>
         {authenticated === false && loading === false && (
-          <ErrorText color={theme.colors.error}>Token inválido</ErrorText>
+          <ErrorText color={theme.colors.text}>Token inválido</ErrorText>
         )}
         <TokenInput
           value={token}
@@ -59,7 +63,8 @@ const Authentication = ({ navigation, theme }) => {
         <SendButton
           mode="contained"
           onPress={() => {
-            tryToAuthenticate();
+            //tryToAuthenticate();
+            navigation.navigate('Gallery');
           }}
           loading={loading}
           disabled={loading || !token}>

@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import {Title} from 'react-native-paper';
+import { Title } from 'react-native-paper';
 
 export const Container = styled.View`
   flex: 1;
@@ -8,9 +8,11 @@ export const Container = styled.View`
 `;
 
 export const GalleryTitle = styled(Title)`
+text-align: center;
     padding-top:40
     font-size: 22;
-    font-family: Poppins-Light;
+    color: ${props => props.color}
+    font-family: Poppins-Regular;
     margin-left: 15;
 `;
 

@@ -2,13 +2,13 @@ import { DefaultTheme } from 'react-native-paper';
 
 export default {
     ...DefaultTheme,
-    dark: true,
+    dark: false,
     roundness: 2,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#AA05AD',
+        primary: '#FFFFFF',
         accent: '#f1c40f',
-        background: '#1F1F1F',
+        background: '#AA05AD',
         placeholder: 'white',
         text: '#FFFFFF',
         error: '#B00020',

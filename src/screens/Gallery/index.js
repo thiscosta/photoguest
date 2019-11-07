@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { StatusBar, BackHandler } from 'react-native';
+import { StatusBar, BackHandler, Image } from 'react-native';
+import Logo from '../../assets/images/logo.png'
 
 import { Creators as PhotosActions } from '../../store/ducks/photo';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,15 +16,20 @@ import {
   PhotoBox,
   Photo,
 } from './styles';
+
 import { FlatList } from 'react-native-gesture-handler';
+import { StackActions } from 'react-navigation'
 
 import theme from '../../design/apptheme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import ImageView from 'react-native-image-view';
+
 const Gallery = ({ theme, navigation }) => {
   const photos = useSelector(store => store.photo.photos);
-  const localPhotos = useSelector(store => store.photo.localPhotos);
   const [logoutVisible, setLogoutVisible] = useState(false)
+  const [photoViewerVisible, setPhotoViewerVisible] = useState(false)
+  const [currentPhoto, setCurrentPhoto] = useState(0)
   const dispatch = useDispatch();
 
   function handleBackPress() {
@@ -43,8 +49,9 @@ const Gallery = ({ theme, navigation }) => {
   }, []);
 
   return (
-    <Container background={theme.colors.background}>
-      <StatusBar backgroundColor={theme.colors.header} />
+    <Container background={theme.colors.primary}>
+      <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
+      <Image style={{ alignSelf: 'center', minWidth: 150, minHeight: 40, marginVertical: 20 }} source={Logo} />
       <Modal
         isVisible={logoutVisible}
         onBackdropPress={() => { }}
@@ -53,13 +60,13 @@ const Gallery = ({ theme, navigation }) => {
         iconColor={theme.colors.accent}
         modalTitle="Atenção"
         modalTitleColor={theme.colors.accent}
-        content={"Tem certeza que deseja sair do aplicativo?"}
+        content={"Tem certeza que deseja fazer logout do aplicativo?"}
         closeText="Cancelar"
         closeAction={() => { setLogoutVisible(false) }}
         confirmText="Sair"
-        confirmAction={() => { navigation.goBack(null) }}
+        confirmAction={() => { navigation.dispatch(StackActions.popToTop()) }}
       />
-      <GalleryTitle>Galeria</GalleryTitle>
+      <GalleryTitle color={theme.colors.header}>Galeria</GalleryTitle>
       <PhotosContainer>
 
         <FlatList
@@ -72,13 +79,25 @@ const Gallery = ({ theme, navigation }) => {
           }}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={0.1}
-          renderItem={({ item }) => (
-            <PhotoBox onPress={() => { }} activeOpacity={0.7}>
-              <Photo source={{ uri: item }} width={30} />
+          renderItem={({ item, index }) => (
+            <PhotoBox onPress={() => {
+              setCurrentPhoto(index)
+              setPhotoViewerVisible(true)
+            }} activeOpacity={0.7}>
+              <Photo source={{ uri: item.source.uri }} width={30} />
             </PhotoBox>
           )}
         />
       </PhotosContainer>
+
+      <ImageView
+        images={photos}
+        imageIndex={currentPhoto}
+        isVisible={photoViewerVisible}
+        onClose={() => {
+          setPhotoViewerVisible(false)
+        }}
+      />
 
     </Container>
   );

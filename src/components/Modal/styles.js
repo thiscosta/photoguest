@@ -27,7 +27,8 @@ export const ModalContent = styled.View`
 `;
 
 export const ContentText = styled(Text)`
-    text-align: center
+    text-align: center;
+    margin-horizontal: 15;
 `;
 
 export const ModalButtonsContainer = styled.View`

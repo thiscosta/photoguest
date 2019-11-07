@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 import { StatusBar, Image } from 'react-native';
+import Logo from '../../assets/images/white-logo.png'
 
 import NetInfo from '@react-native-community/netinfo'
 
 import { withTheme, Button, ActivityIndicator } from 'react-native-paper';
 import {
   Container, PhotoContainer, CameraTitle, SaveButton,
-  CustomCheckbox, CheckboxContainer, CheckboxTitle
+  CustomCheckbox, CheckboxContainer, CheckboxTitle,
+  ButtonText
 } from './styles';
 
 import appTheme from '../../design/apptheme';
@@ -15,7 +17,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import { ActionSheetCustom } from 'react-native-actionsheet';
-import defaultStyles from 'react-native-actionsheet/lib/styles';
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Creators as PhotoActions } from '../../store/ducks/photo'
@@ -29,6 +30,7 @@ const Camera = ({ theme }) => {
 
   const [photo, setPhoto] = useState('');
   const [checked, setChecked] = useState(false)
+  const [edit, setEdit] = useState(false)
   const [loadingPhoto, setLoadingPhoto] = useState(false);
   const savingPhoto = useSelector(store => store.photo.saving)
   const successSaved = useSelector(store => store.photo.successSaved)
@@ -57,10 +59,8 @@ const Camera = ({ theme }) => {
     switch (index) {
       case 0:
         ImagePicker.openPicker({
-          width: 1280,
-          height: 720,
           compressImageQuality: 0.3,
-          cropping: true,
+          cropping: edit,
           includeBase64: true,
         }).then(handleImageReady)
           .catch(() => {
@@ -69,15 +69,17 @@ const Camera = ({ theme }) => {
         break;
       case 1:
         ImagePicker.openCamera({
-          width: 1280,
-          height: 720,
           compressImageQuality: 0.3,
-          cropping: true,
+          cropping: edit,
           includeBase64: true,
         }).then(handleImageReady)
           .catch(() => {
             setLoadingPhoto(false)
           });
+        break;
+      case 2:
+        setLoadingPhoto(false)
+        break;
     }
   }
 
@@ -90,7 +92,7 @@ const Camera = ({ theme }) => {
     if (!photo) {
       return (
         <Button loading={photo} disabled={photo}>
-          Selecionar imagem
+          <ButtonText color={theme.colors.background}>Selecionar imagem</ButtonText>
         </Button>
       );
     }
@@ -107,7 +109,7 @@ const Camera = ({ theme }) => {
             right: 0,
             left: 0,
           }}
-          resizeMode="contain"
+          resizeMode="stretch"
           source={{ uri: `data:image/png;base64,${photo}` }}
         />
       );
@@ -131,11 +133,22 @@ const Camera = ({ theme }) => {
 
   return (
     <Container background={theme.colors.background}>
-      <StatusBar backgroundColor={theme.colors.header} />
+      <StatusBar backgroundColor={theme.colors.background} barStyle="light-content" />
+      <Image style={{ alignSelf: 'center', minWidth: 150, minHeight: 40, marginVertical: 20 }} source={Logo} />
       <CameraTitle>Nova foto</CameraTitle>
-      <PhotoContainer background={theme.colors.header} onPress={selectImage}>
+      <PhotoContainer background={theme.colors.primary} onPress={selectImage}>
         {renderPhotoContainerContent()}
       </PhotoContainer>
+      <CheckboxContainer>
+        <CustomCheckbox
+          color={theme.colors.primary}
+          status={edit ? 'checked' : 'unchecked'}
+          onPress={() => {
+            setEdit(!edit)
+          }}
+        />
+        <CheckboxTitle color={theme.colors.text}>Editar foto</CheckboxTitle>
+      </CheckboxContainer>
       <CheckboxContainer>
         <CustomCheckbox
           color={theme.colors.primary}
@@ -162,29 +175,7 @@ const Camera = ({ theme }) => {
         options={['Galeria', 'Câmera', 'Cancelar']}
         cancelButtonIndex={2}
         destructiveButtonIndex={2}
-        tintColor={theme.colors.primary}
-        styles={{
-          body: {
-            ...defaultStyles.body,
-            backgroundColor: theme.colors.background,
-          },
-          buttonBox: {
-            ...defaultStyles.buttonBox,
-            backgroundColor: theme.colors.header,
-          },
-          titleBox: {
-            ...defaultStyles.titleBox,
-            backgroundColor: theme.colors.header,
-          },
-          titleText: {
-            ...defaultStyles.titleText,
-            color: theme.colors.text,
-          },
-          cancelButtonBox: {
-            ...defaultStyles.cancelButtonBox,
-            backgroundColor: theme.colors.header,
-          },
-        }}
+        tintColor={theme.colors.background}
         onPress={optionSelected}
       />
     </Container>
