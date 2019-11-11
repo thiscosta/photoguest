@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 
 import {StatusBar, Image, SafeAreaView} from 'react-native';
@@ -5,7 +6,7 @@ import {StatusBar, Image, SafeAreaView} from 'react-native';
 import Logo from '../../assets/images/white-logo.png';
 import Header from '../../components/Header';
 
-import NetInfo from '@react-native-community/netinfo' ;
+import NetInfo from '@react-native-community/netinfo';
 
 import {withTheme, Button, ActivityIndicator} from 'react-native-paper';
 import {
@@ -26,7 +27,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {ActionSheetCustom} from 'react-native-actionsheet';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {Creators as PhotoActions} from '../../store/ducks/photo' ;
+import {Creators as PhotoActions} from '../../store/ducks/photo';
 
 import PouchDB from 'pouchdb-react-native';
 
@@ -36,25 +37,25 @@ const Camera = ({theme}) => {
 
   const [photo, setPhoto] = useState('');
   const [checked, setChecked] = useState(false);
-  const [edit, setEdit] = useState(false) ;
+  const [edit, setEdit] = useState(false);
   const [loadingPhoto, setLoadingPhoto] = useState(false);
-  const savingPhoto = useSelector(store => store.photo.saving) ;
+  const savingPhoto = useSelector(store => store.photo.saving);
   const successSaved = useSelector(store => store.photo.successSaved);
-  const dispatch = useDispatch() ;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     function handlePhotoSave() {
       if (!savingPhoto && !successSaved) {
-        savePhotoLocally() ;
+        savePhotoLocally();
       }
       if (!savingPhoto && successSaved) {
         dispatch(PhotoActions.getPhotos());
-        setPhoto('') ;
-        setChecked(false) ;
+        setPhoto('');
+        setChecked(false);
       }
     }
     return handlePhotoSave();
-  }, [dispatch, savePhotoLocally, savingPhoto, successSaved]) ;
+  }, [savingPhoto, successSaved]);
 
   async function selectImage() {
     actionSheet.show();
@@ -70,8 +71,9 @@ const Camera = ({theme}) => {
           includeBase64: true,
         })
           .then(handleImageReady)
-          .catch(() => {
-            setLoadingPhoto(false) ;
+          .catch(err => {
+            console.log('erro image ready: ', err);
+            setLoadingPhoto(false);
           });
         break;
       case 1:
@@ -86,7 +88,7 @@ const Camera = ({theme}) => {
           });
         break;
       case 2:
-        setLoadingPhoto(false) ;
+        setLoadingPhoto(false);
         break;
     }
   }
@@ -125,18 +127,18 @@ const Camera = ({theme}) => {
   }
 
   async function savePhoto() {
-    const connectionInfo = await NetInfo.fetch() ;
+    const connectionInfo = await NetInfo.fetch();
     if (connectionInfo.isConnected && connectionInfo.isInternetReachable) {
       dispatch(PhotoActions.savePhoto(photo, checked));
     } else {
-      savePhotoLocally() ;
+      savePhotoLocally();
     }
   }
 
   async function savePhotoLocally() {
     await db.post({base64: photo});
     setPhoto('');
-    setChecked(false) ;
+    setChecked(false);
   }
 
   return (
@@ -165,7 +167,7 @@ const Camera = ({theme}) => {
             status={checked ? 'checked' : 'unchecked'}
             disabled={!photo}
             onPress={() => {
-              setChecked(!checked) ;
+              setChecked(!checked);
             }}
           />
           <CheckboxTitle color={photo ? theme.colors.text : theme.colors.gray}>
