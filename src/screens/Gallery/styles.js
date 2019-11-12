@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import {Title, Text, Appbar} from 'react-native-paper';
+import { Title, Text, Appbar } from 'react-native-paper';
 
 export const Container = styled.ScrollView.attrs({})`
   background-color: ${props => props.background};
@@ -46,13 +46,11 @@ export const EventMainDetailsTitle = styled(Title)`
   color: ${props => props.color};
   font-size: 18;
   font-family: Poppins-Bold;
-  align-items: flex-end;
-  text-align: center;
 `;
 
 export const EventMainDetailsRow = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 export const EventMainDetailsRowTitle = styled(Text)`
@@ -70,7 +68,7 @@ export const EventMainDetailsRowData = styled(Text)`
 
 export const EventCapacityContainer = styled.View`
   flex: 1;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   flex-direction: column;
 `;
@@ -105,7 +103,8 @@ export const PhotosContainer = styled.View`
 `;
 
 export const PhotoBox = styled.TouchableOpacity`
-    flex: 1;
+    width: ${props => props.width};
+    height: ${props => props.width};
     flex-direction: row;
     justify-content: space-evenly
     margin-vertical: 2;
@@ -115,7 +114,6 @@ export const Photo = styled.Image`
   resize-mode: cover;
   flex: 1;
   margin-horizontal: 2;
-  height: 200;
   border-width: 1;
   border-color: ${props => props.color};
 `;

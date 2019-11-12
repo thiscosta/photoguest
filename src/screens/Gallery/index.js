@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {StatusBar, BackHandler, SafeAreaView} from 'react-native';
+import { StatusBar, BackHandler, SafeAreaView, Dimensions } from 'react-native';
 
 import Header from '../../components/Header';
 import Logo from '../../assets/images/logo.png';
 
-import {Creators as PhotosActions} from '../../store/ducks/photo';
-import {useSelector, useDispatch} from 'react-redux';
+import { Creators as PhotosActions } from '../../store/ducks/photo';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Modal from '../../components/Modal';
 
-import {withTheme, ActivityIndicator} from 'react-native-paper';
+import { withTheme, ActivityIndicator } from 'react-native-paper';
 
 import {
   Container,
@@ -32,15 +32,15 @@ import {
   EventCapacityText,
 } from './styles';
 
-import {FlatList} from 'react-native-gesture-handler';
-import {StackActions} from 'react-navigation';
+import { FlatList } from 'react-native-gesture-handler';
+import { StackActions } from 'react-navigation';
 
 import theme from '../../design/apptheme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImageView from 'react-native-image-view';
 
-const Gallery = ({theme, navigation}) => {
+const Gallery = ({ theme, navigation }) => {
   const photos = useSelector(store => store.photo.photos);
   const event = useSelector(store => store.auth.event);
   const [logoutVisible, setLogoutVisible] = useState(false);
@@ -68,7 +68,7 @@ const Gallery = ({theme, navigation}) => {
   }, [dispatch]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header logo={Logo} />
       <Container background={theme.colors.primary}>
         <StatusBar
@@ -77,7 +77,7 @@ const Gallery = ({theme, navigation}) => {
         />
         <Modal
           isVisible={logoutVisible}
-          onBackdropPress={() => {}}
+          onBackdropPress={() => { }}
           modalBackground={theme.colors.background}
           iconName="alert-outline"
           iconColor={theme.colors.accent}
@@ -101,7 +101,7 @@ const Gallery = ({theme, navigation}) => {
                 'http://photoguest.com.br/uploads/25/thumb_25_1573126230.jpg',
             }}
             resizeMode="contain"
-            style={{flex: 1, width: 800}}
+            style={{ flex: 1, width: 800 }}
           />
           <EventDetails>
             <EventMainDetails>
@@ -166,8 +166,9 @@ const Gallery = ({theme, navigation}) => {
                 </EmptyGalleryText>
               </EmptyGalleryContainer>
             }
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <PhotoBox
+                width={Dimensions.get('screen').width / 3}
                 onPress={() => {
                   setCurrentPhoto(index);
                   setPhotoViewerVisible(true);
@@ -175,8 +176,7 @@ const Gallery = ({theme, navigation}) => {
                 activeOpacity={0.7}>
                 <Photo
                   color={theme.colors.lightGray}
-                  source={{uri: item.source.uri}}
-                  width={30}
+                  source={{ uri: item.source.uri }}
                   loadingIndicatorSource={<ActivityIndicator />}
                   fadeDuration={1000}
                 />
@@ -198,9 +198,9 @@ const Gallery = ({theme, navigation}) => {
   );
 };
 
-Gallery.navigationOptions = ({tintColor, navigationOptions}) => ({
+Gallery.navigationOptions = ({ tintColor, navigationOptions }) => ({
   title: 'Galeria',
-  tabBarIcon: ({focused, horizontal, tintColor}) => (
+  tabBarIcon: ({ focused, horizontal, tintColor }) => (
     <Icon name="photo" size={22} color={tintColor} />
   ),
   headerStyle: {
