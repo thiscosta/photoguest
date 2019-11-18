@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {StatusBar, Image, SafeAreaView} from 'react-native';
+import { StatusBar, Image, SafeAreaView } from 'react-native';
 
 import Logo from '../../assets/images/white-logo.png';
 import Header from '../../components/Header';
 
 import NetInfo from '@react-native-community/netinfo';
 
-import {withTheme, Button, ActivityIndicator} from 'react-native-paper';
+import { withTheme, Button, ActivityIndicator } from 'react-native-paper';
 import {
   Container,
   PhotoContainer,
@@ -24,14 +24,14 @@ import appTheme from '../../design/apptheme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImagePicker from 'react-native-image-crop-picker';
-import {ActionSheetCustom} from 'react-native-actionsheet';
+import { ActionSheetCustom } from 'react-native-actionsheet';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {Creators as PhotoActions} from '../../store/ducks/photo';
+import { useDispatch, useSelector } from 'react-redux';
+import { Creators as PhotoActions } from '../../store/ducks/photo';
 
 import PouchDB from 'pouchdb-react-native';
 
-const Camera = ({theme}) => {
+const Camera = ({ theme }) => {
   let actionSheet;
   const db = new PouchDB('photoguest_database');
 
@@ -72,7 +72,6 @@ const Camera = ({theme}) => {
         })
           .then(handleImageReady)
           .catch(err => {
-            console.log('erro image ready: ', err);
             setLoadingPhoto(false);
           });
         break;
@@ -120,7 +119,7 @@ const Camera = ({theme}) => {
             left: 0,
           }}
           resizeMode="stretch"
-          source={{uri: `data:image/png;base64,${photo}`}}
+          source={{ uri: `data:image/png;base64,${photo}` }}
         />
       );
     }
@@ -136,13 +135,13 @@ const Camera = ({theme}) => {
   }
 
   async function savePhotoLocally() {
-    await db.post({base64: photo});
+    await db.post({ base64: photo });
     setPhoto('');
     setChecked(false);
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Header background={theme.colors.background} logo={Logo} />
       <Container background={theme.colors.background}>
         <StatusBar
@@ -199,7 +198,7 @@ const Camera = ({theme}) => {
 
 Camera.navigationOptions = () => ({
   title: 'Nova foto',
-  tabBarIcon: ({tintColor}) => (
+  tabBarIcon: ({ tintColor }) => (
     <Icon name="camera" size={22} color={tintColor} />
   ),
   headerStyle: {

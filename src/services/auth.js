@@ -7,7 +7,6 @@ export const tryAuth = async token => {
   );
 
   if (response.data.sucess == 200) {
-    console.log("authData: ", response)
     await AsyncStorage.setItem('@authData', JSON.stringify(response.data))
     return {
       success: true,

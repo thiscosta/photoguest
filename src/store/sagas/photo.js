@@ -45,6 +45,25 @@ export function* savePhoto(action) {
     }
 }
 
+export function* removePhoto(action) {
+    try {
+        const result = yield call(service.deletePhoto, action.payload.photo)
+
+        if (result.success) {
+            yield put(PhotoActions.deletePhotoSuccess())
+            yield put(PhotoActions.getPhotos())
+            return;
+        }
+
+        yield put(PhotoActions.deletePhotoFailed())
+        yield put(ErrorActions.addError("Não foi possível excluir a foto, por favor, tente novamente"))
+
+    } catch (err) {
+        yield put(PhotoActions.deletePhotoFailed())
+        yield put(ErrorActions.addError(err.toString()))
+    }
+}
+
 export function* uploadPhotos() {
     try {
         const result = yield call(service.uploadPhotos)

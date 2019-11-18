@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { StatusBar, BackHandler, SafeAreaView, Dimensions } from 'react-native';
+import { StatusBar, BackHandler, SafeAreaView, Dimensions, View, Text } from 'react-native';
 
 import Header from '../../components/Header';
 import Logo from '../../assets/images/logo.png';
@@ -10,7 +10,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Modal from '../../components/Modal';
 
-import { withTheme, ActivityIndicator } from 'react-native-paper';
+import { withTheme, ActivityIndicator, FAB } from 'react-native-paper';
+
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 import {
   Container,
@@ -32,20 +34,29 @@ import {
   EventCapacityText,
 } from './styles';
 
-import { FlatList } from 'react-native-gesture-handler';
-import { StackActions } from 'react-navigation';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { StackActions, ThemeContext } from 'react-navigation';
 
 import theme from '../../design/apptheme';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import ImageView from 'react-native-image-view';
 
 const Gallery = ({ theme, navigation }) => {
+
   const photos = useSelector(store => store.photo.photos);
   const event = useSelector(store => store.auth.event);
+  const deleting = useSelector(store => store.photo.deleting)
+  const deleted = useSelector(store => store.photo.deleted)
+
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [photoViewerVisible, setPhotoViewerVisible] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [deleteModalVisibility, setDeleteModalVisibility] = useState(false)
+  const [imageToDelete, setImageToDelete] = useState('')
+
+  let toast;
+
   const dispatch = useDispatch();
 
   function handleBackPress() {
@@ -66,6 +77,21 @@ const Gallery = ({ theme, navigation }) => {
       backHandler.remove();
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (deleted) {
+      setImageToDelete("")
+      setDeleteModalVisibility(false)
+      setPhotoViewerVisible(false)
+      toast.show("Excluído com sucesso!", DURATION.LENGTH_SHORT)
+    }
+  }, [deleted])
+
+  function deletePhoto() {
+    if (imageToDelete) {
+      dispatch(PhotosActions.deletePhoto(imageToDelete))
+    }
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -160,7 +186,7 @@ const Gallery = ({ theme, navigation }) => {
             onEndReachedThreshold={0.1}
             ListEmptyComponent={
               <EmptyGalleryContainer>
-                <Icon name="photo" size={40} color={theme.colors.gray} />
+                <FontAwesomeIcon name="photo" size={40} color={theme.colors.gray} />
                 <EmptyGalleryText color={theme.colors.gray}>
                   Esperando suas fotos
                 </EmptyGalleryText>
@@ -192,7 +218,52 @@ const Gallery = ({ theme, navigation }) => {
           onClose={() => {
             setPhotoViewerVisible(false);
           }}
+          renderFooter={(currentImage) => (
+            <View style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingBottom: 30,
+              backgroundColor: 'rgba(0,0,0,.5)'
+            }}>
+              <FAB
+                style={{
+                  backgroundColor: theme.colors.background
+                }}
+                medium
+                icon="delete"
+                onPress={() => {
+                  setDeleteModalVisibility(true)
+                  setImageToDelete(currentImage.source.uri)
+                }}
+              />
+            </View>
+          )}
         />
+        <Modal
+          isVisible={deleteModalVisibility}
+          onBackdropPress={() => {
+            setDeleteModalVisibility(false)
+            setImageToDelete("")
+          }}
+          modalBackground={theme.colors.background}
+          iconName="alert-outline"
+          iconColor={theme.colors.primary}
+          modalTitle="Atenção"
+          modalTitleColor={theme.colors.primary}
+          content={"Deseja realmente excluir a foto?"}
+          closeText="Cancelar"
+          confirmText="Confirmar"
+          closeAction={() => {
+            setDeleteModalVisibility(false)
+            setImageToDelete("")
+          }}
+          confirmAction={() => {
+            setDeleteModalVisibility(false)
+            deletePhoto()
+          }}
+        />
+        <Toast ref={ref => toast = ref} position='bottom' />
       </Container>
     </SafeAreaView>
   );
@@ -201,7 +272,7 @@ const Gallery = ({ theme, navigation }) => {
 Gallery.navigationOptions = ({ tintColor, navigationOptions }) => ({
   title: 'Galeria',
   tabBarIcon: ({ focused, horizontal, tintColor }) => (
-    <Icon name="photo" size={22} color={tintColor} />
+    <FontAwesomeIcon name="photo" size={22} color={tintColor} />
   ),
   headerStyle: {
     backgroundColor: theme.colors.header,

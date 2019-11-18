@@ -23,18 +23,17 @@ export default function auth(state = INITIAL_STATE, action) {
         ...state,
         authenticated: null,
         loading: true,
-        event: {...INITIAL_STATE.event},
+        event: { ...INITIAL_STATE.event },
       };
     case Types.AUTHENTICATE_SUCCESS:
-      console.log('actionpelod, ', action.payload);
       return {
         ...state,
         authenticated: true,
-        event: {...action.payload},
+        event: { ...action.payload },
         loading: false,
       };
     case Types.AUTHENTICATE_FAILED:
-      return {...state, authenticated: false, loading: false};
+      return { ...state, authenticated: false, loading: false };
     default:
       return state;
   }
@@ -49,5 +48,5 @@ export const Creators = {
     type: Types.AUTHENTICATE_SUCCESS,
     payload: event,
   }),
-  authenticateFailed: () => ({type: Types.AUTHENTICATE_FAILED}),
+  authenticateFailed: () => ({ type: Types.AUTHENTICATE_FAILED }),
 };
